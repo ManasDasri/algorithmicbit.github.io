@@ -15,36 +15,70 @@
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background: #ff69b4;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 50%, #c71585 100%);
             overflow-x: hidden;
             cursor: none;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            opacity: 0.6;
+            animation: float-particle 15s infinite ease-in-out;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            25% { transform: translate(100px, -100px) scale(1.5); opacity: 0.3; }
+            50% { transform: translate(-50px, -200px) scale(0.8); opacity: 0.8; }
+            75% { transform: translate(-100px, -150px) scale(1.2); opacity: 0.4; }
         }
 
         .cursor {
             position: fixed;
             width: 20px;
             height: 20px;
-            border: 2px solid #ff0000;
+            border: 2px solid #fff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 10000;
-            transition: all 0.1s ease;
+            transition: all 0.15s ease;
             mix-blend-mode: difference;
+            animation: pulse-cursor 2s infinite;
+        }
+
+        @keyframes pulse-cursor {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         .cursor-follower {
             position: fixed;
             width: 40px;
             height: 40px;
-            border: 1px solid rgba(255,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.5);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             mix-blend-mode: difference;
         }
 
-        /* Pixelated top border */
         .pixel-border-top {
             width: 100%;
             height: 40px;
@@ -69,6 +103,12 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            animation: pixel-shift 20s linear infinite;
+        }
+
+        @keyframes pixel-shift {
+            from { background-position: 0 0; }
+            to { background-position: 80px 0; }
         }
 
         .container {
@@ -77,30 +117,63 @@
             background: #f5f5f5;
             min-height: 100vh;
             position: relative;
-            box-shadow: 0 0 0 20px #ff69b4;
+            box-shadow: 0 0 0 20px rgba(255,105,180,0.5);
+            z-index: 1;
         }
 
         .desktop-bar {
-            background: #ff69b4;
+            background: linear-gradient(90deg, #ff69b4, #ff1493);
             padding: 10px 20px;
             text-align: center;
-            color: #000;
+            color: #fff;
             font-size: 10px;
             letter-spacing: 2px;
+            animation: gradient-slide 3s ease infinite;
+            background-size: 200% 100%;
         }
 
-        /* Navigation */
+        @keyframes gradient-slide {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         .nav {
             display: flex;
             justify-content: space-between;
             padding: 20px 40px;
             background: #fff;
             border-bottom: 4px solid #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff1493, transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            to { left: 100%; }
         }
 
         .logo {
             font-size: 14px;
             color: #000;
+            animation: glitch 5s infinite;
+            position: relative;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
         }
 
         .nav-links {
@@ -113,20 +186,52 @@
         .nav-link {
             color: #000;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff1493;
+            transition: width 0.3s;
         }
 
         .nav-link:hover {
             color: #ff1493;
+            transform: translateY(-2px);
         }
 
-        /* Hero Section */
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
         .hero {
             padding: 80px 40px;
             text-align: center;
-            background: #fff;
+            background: linear-gradient(135deg, #fff 0%, #ffe6f0 100%);
             position: relative;
             overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,105,180,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            to { transform: translate(50px, 50px); }
         }
 
         .hero-title {
@@ -135,12 +240,28 @@
             color: #000;
             margin-bottom: 20px;
             text-shadow: 4px 4px 0 #ff69b4;
+            animation: title-float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes title-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .hero-subtitle {
             font-size: clamp(12px, 2vw, 20px);
             color: #000;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+            animation: fade-in 1s ease-in;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .cta-btn {
@@ -154,6 +275,27 @@
             transition: all 0.3s;
             box-shadow: 6px 6px 0 #000;
             text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .cta-btn:hover {
@@ -161,20 +303,26 @@
             box-shadow: 3px 3px 0 #000;
         }
 
-        /* Pixel Dino */
         .pixel-dino {
             position: absolute;
             right: 80px;
             bottom: 40px;
             width: 150px;
             height: 150px;
+            animation: dino-bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
         }
 
-        /* Stats Section */
+        @keyframes dino-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
         .stats-section {
             padding: 60px 40px;
             background: #fff;
             border-top: 4px solid #000;
+            position: relative;
         }
 
         .stats-intro {
@@ -184,6 +332,7 @@
             font-size: 10px;
             line-height: 2;
             color: #000;
+            animation: fade-in 1.5s ease-in;
         }
 
         .stats-grid {
@@ -196,25 +345,62 @@
 
         .stat-item {
             text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff, #ffe6f0);
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,105,180,0.2), transparent);
+            animation: stat-shine 3s infinite;
+        }
+
+        @keyframes stat-shine {
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px) rotate(-2deg);
+            box-shadow: 12px 12px 0 rgba(255,20,147,0.3);
         }
 
         .stat-number {
             font-size: clamp(30px, 5vw, 50px);
-            color: #000;
+            color: #ff1493;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            animation: count-up 2s ease-out;
+        }
+
+        @keyframes count-up {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .stat-label {
             font-size: 8px;
             color: #666;
             line-height: 1.6;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Who We Are Section */
         .who-section {
             padding: 80px 40px;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #f5f5f5, #ffe6f0);
             border-top: 4px solid #000;
+            position: relative;
         }
 
         .section-title {
@@ -223,9 +409,9 @@
             color: #000;
             margin-bottom: 60px;
             text-shadow: 4px 4px 0 #ff69b4;
+            animation: title-float 4s ease-in-out infinite;
         }
 
-        /* Services Section */
         .services-section {
             padding: 80px 40px;
             background: #fff;
@@ -242,6 +428,7 @@
             font-size: 12px;
             color: #000;
             margin-bottom: 10px;
+            animation: fade-in 1s ease-in;
         }
 
         .expand-icon {
@@ -259,10 +446,16 @@
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 6px 6px 0 #ff69b4;
+            animation: icon-rotate 4s ease-in-out infinite;
+        }
+
+        @keyframes icon-rotate {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(45deg); }
         }
 
         .expand-icon:hover {
-            transform: translate(3px, 3px);
+            transform: translate(3px, 3px) rotate(90deg) !important;
             box-shadow: 3px 3px 0 #ff69b4;
         }
 
@@ -275,21 +468,44 @@
         }
 
         .service-card {
-            background: #ff69b4;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
             border: 4px solid #000;
             padding: 30px;
             box-shadow: 8px 8px 0 #000;
-            transition: all 0.3s;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            animation: card-appear 0.6s ease-out backwards;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes card-appear {
+            from { opacity: 0; transform: translateY(50px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: top 0.5s;
+        }
+
+        .service-card:hover::before {
+            top: 100%;
         }
 
         .service-card:hover {
-            transform: translate(4px, 4px);
+            transform: translate(4px, 4px) scale(1.05) rotate(-1deg);
             box-shadow: 4px 4px 0 #000;
-        }
-
-        .service-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
         }
 
         .pixel-icon {
@@ -297,30 +513,37 @@
             height: 80px;
             margin-bottom: 20px;
             image-rendering: pixelated;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            animation: icon-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .service-title {
             font-size: 12px;
-            color: #000;
+            color: #fff;
             margin-bottom: 15px;
             text-transform: uppercase;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
         }
 
         .service-desc {
             font-size: 8px;
-            color: #000;
+            color: #fff;
             line-height: 1.8;
-        }
-
-        /* Pixel Art Decorations */
-        .pixel-decoration {
-            position: absolute;
-            image-rendering: pixelated;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
         }
 
         .pixel-flower {
-            width: 100px;
-            height: 100px;
+            animation: flower-spin 8s linear infinite;
+        }
+
+        @keyframes flower-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -342,19 +565,74 @@
                 height: 80px;
                 right: 20px;
             }
+
+            .expand-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+            border: 2px solid #fff;
+            border-radius: 15px;
+            z-index: 100;
+            animation: scroll-bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            animation: scroll-dot 2s infinite;
+        }
+
+        @keyframes scroll-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scroll-dot {
+            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(20px); opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <div class="particles">
+        <div class="particle" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; top: 40%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; top: 60%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; top: 30%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; top: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; top: 50%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; top: 80%; animation-delay: 2.5s;"></div>
+        <div class="particle" style="left: 80%; top: 35%; animation-delay: 4.5s;"></div>
+        <div class="particle" style="left: 90%; top: 65%; animation-delay: 1.5s;"></div>
+        <div class="particle" style="left: 15%; top: 85%; animation-delay: 3.5s;"></div>
+    </div>
+
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
     <div class="pixel-border-top"></div>
 
     <div class="container">
-        <div class="desktop-bar">desktop</div>
+        <div class="desktop-bar">★ ELITE DEVELOPER ★ CREATIVE SOLUTIONS ★ MODERN DESIGNS ★</div>
 
-        <!-- Navigation -->
         <nav class="nav">
             <div class="logo">M.DEV</div>
             <div class="nav-links">
@@ -365,13 +643,11 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
         <section class="hero">
             <h1 class="hero-title">DEVELOPMENT<br>IS MY ART</h1>
             <p class="hero-subtitle">SUCCESS IS YOUR REALITY</p>
             <button class="cta-btn">LET'S START</button>
 
-            <!-- Pixel Dino -->
             <svg class="pixel-dino" viewBox="0 0 100 100">
                 <rect x="30" y="20" width="10" height="10" fill="#00ff00"/>
                 <rect x="40" y="20" width="10" height="10" fill="#00ff00"/>
@@ -389,7 +665,6 @@
                 <rect x="50" y="50" width="10" height="10" fill="#00ff00"/>
                 <rect x="60" y="50" width="10" height="10" fill="#00ff00"/>
                 <rect x="45" y="25" width="5" height="5" fill="#000"/>
-                <!-- Skateboard -->
                 <rect x="25" y="70" width="50" height="5" fill="#333"/>
                 <circle cx="30" cy="75" r="5" fill="#333"/>
                 <circle cx="70" cy="75" r="5" fill="#333"/>
@@ -417,12 +692,10 @@
             </div>
         </section>
 
-        <!-- Who We Are Section -->
         <section class="who-section">
             <h2 class="section-title">WHO AM I?</h2>
             
-            <!-- Pixel Flowers -->
-            <svg style="position: absolute; left: 40px; top: 100px;" width="80" height="80" viewBox="0 0 20 20">
+            <svg class="pixel-flower" style="position: absolute; left: 40px; top: 100px;" width="80" height="80" viewBox="0 0 20 20">
                 <rect x="8" y="4" width="4" height="4" fill="#00ff00"/>
                 <rect x="4" y="8" width="4" height="4" fill="#00ff00"/>
                 <rect x="12" y="8" width="4" height="4" fill="#00ff00"/>
@@ -430,7 +703,7 @@
                 <rect x="8" y="8" width="4" height="4" fill="#ffff00"/>
             </svg>
 
-            <svg style="position: absolute; right: 60px; bottom: 150px;" width="100" height="100" viewBox="0 0 20 20">
+            <svg class="pixel-flower" style="position: absolute; right: 60px; bottom: 150px;" width="100" height="100" viewBox="0 0 20 20">
                 <rect x="8" y="4" width="4" height="4" fill="#00ff00"/>
                 <rect x="4" y="8" width="4" height="4" fill="#00ff00"/>
                 <rect x="12" y="8" width="4" height="4" fill="#00ff00"/>
@@ -439,24 +712,23 @@
             </svg>
         </section>
 
-        <!-- Services Section -->
         <section class="services-section">
             <div class="expand-icon">↗</div>
             
             <div class="services-header">
                 <p class="services-subtitle">SERVICES</p>
-                <p class="services-subtitle">FOR</p>
+                <p class="services-subtitle">FOR YOU</p>
             </div>
 
             <div class="services-grid">
                 <div class="service-card">
                     <svg class="pixel-icon" viewBox="0 0 32 32">
-                        <rect x="4" y="12" width="24" height="2" fill="#000"/>
-                        <rect x="4" y="16" width="24" height="2" fill="#000"/>
-                        <rect x="4" y="20" width="16" height="2" fill="#000"/>
-                        <rect x="8" y="8" width="4" height="4" fill="#000"/>
-                        <rect x="16" y="8" width="4" height="4" fill="#000"/>
-                        <rect x="0" y="24" width="32" height="4" fill="#000"/>
+                        <rect x="4" y="12" width="24" height="2" fill="#fff"/>
+                        <rect x="4" y="16" width="24" height="2" fill="#fff"/>
+                        <rect x="4" y="20" width="16" height="2" fill="#fff"/>
+                        <rect x="8" y="8" width="4" height="4" fill="#fff"/>
+                        <rect x="16" y="8" width="4" height="4" fill="#fff"/>
+                        <rect x="0" y="24" width="32" height="4" fill="#fff"/>
                     </svg>
                     <h3 class="service-title">WEB DEVELOPMENT</h3>
                     <p class="service-desc">BUILDING RESPONSIVE AND MODERN WEBSITES WITH CLEAN CODE</p>
@@ -464,12 +736,12 @@
 
                 <div class="service-card">
                     <svg class="pixel-icon" viewBox="0 0 32 32">
-                        <circle cx="16" cy="16" r="12" fill="none" stroke="#000" stroke-width="2"/>
-                        <circle cx="16" cy="16" r="6" fill="#000"/>
-                        <rect x="14" y="4" width="4" height="8" fill="#000"/>
-                        <rect x="14" y="20" width="4" height="8" fill="#000"/>
-                        <rect x="4" y="14" width="8" height="4" fill="#000"/>
-                        <rect x="20" y="14" width="8" height="4" fill="#000"/>
+                        <circle cx="16" cy="16" r="12" fill="none" stroke="#fff" stroke-width="2"/>
+                        <circle cx="16" cy="16" r="6" fill="#fff"/>
+                        <rect x="14" y="4" width="4" height="8" fill="#fff"/>
+                        <rect x="14" y="20" width="4" height="8" fill="#fff"/>
+                        <rect x="4" y="14" width="8" height="4" fill="#fff"/>
+                        <rect x="20" y="14" width="8" height="4" fill="#fff"/>
                     </svg>
                     <h3 class="service-title">GAME DEVELOPMENT</h3>
                     <p class="service-desc">CREATING INTERACTIVE EXPERIENCES WITH UNITY AND C#</p>
@@ -477,9 +749,9 @@
 
                 <div class="service-card">
                     <svg class="pixel-icon" viewBox="0 0 32 32">
-                        <rect x="8" y="8" width="16" height="16" fill="none" stroke="#000" stroke-width="2"/>
-                        <rect x="12" y="12" width="8" height="8" fill="#000"/>
-                        <path d="M4,4 L8,8 M28,4 L24,8 M4,28 L8,24 M28,28 L24,24" stroke="#000" stroke-width="2"/>
+                        <rect x="8" y="8" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"/>
+                        <rect x="12" y="12" width="8" height="8" fill="#fff"/>
+                        <path d="M4,4 L8,8 M28,4 L24,8 M4,28 L8,24 M28,28 L24,24" stroke="#fff" stroke-width="2"/>
                     </svg>
                     <h3 class="service-title">UI/UX DESIGN</h3>
                     <p class="service-desc">DESIGNING INTUITIVE AND BEAUTIFUL USER INTERFACES</p>
@@ -487,10 +759,10 @@
 
                 <div class="service-card">
                     <svg class="pixel-icon" viewBox="0 0 32 32">
-                        <rect x="6" y="8" width="20" height="16" fill="none" stroke="#000" stroke-width="2"/>
-                        <rect x="10" y="12" width="12" height="8" fill="#000"/>
-                        <rect x="12" y="24" width="8" height="2" fill="#000"/>
-                        <rect x="8" y="26" width="16" height="2" fill="#000"/>
+                        <rect x="6" y="8" width="20" height="16" fill="none" stroke="#fff" stroke-width="2"/>
+                        <rect x="10" y="12" width="12" height="8" fill="#fff"/>
+                        <rect x="12" y="24" width="8" height="2" fill="#fff"/>
+                        <rect x="8" y="26" width="16" height="2" fill="#fff"/>
                     </svg>
                     <h3 class="service-title">AI/ML SOLUTIONS</h3>
                     <p class="service-desc">IMPLEMENTING INTELLIGENT SYSTEMS AND AUTOMATION</p>
@@ -499,35 +771,71 @@
         </section>
     </div>
 
+    <div class="scroll-indicator"></div>
+
     <script>
-        // Custom cursor
         const cursor = document.querySelector('.cursor');
         const follower = document.querySelector('.cursor-follower');
 
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
+
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+            mouseX = e.clientX;
+            mouseY = e.clientY;
             
-            setTimeout(() => {
-                follower.style.left = e.clientX + 'px';
-                follower.style.top = e.clientY + 'px';
-            }, 100);
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
         });
 
-        // Button hover effects
-        const buttons = document.querySelectorAll('.cta-btn, .service-card, .expand-icon');
+        function animateFollower() {
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+            
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+            
+            requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
+
+        const buttons = document.querySelectorAll('.cta-btn, .service-card, .expand-icon, .stat-item');
         buttons.forEach(btn => {
             btn.addEventListener('mouseenter', () => {
                 cursor.style.width = '60px';
                 cursor.style.height = '60px';
-                cursor.style.background = 'rgba(255,0,0,0.2)';
+                cursor.style.background = 'rgba(255,255,255,0.2)';
+                cursor.style.borderColor = '#ffff00';
             });
 
             btn.addEventListener('mouseleave', () => {
                 cursor.style.width = '20px';
                 cursor.style.height = '20px';
                 cursor.style.background = 'transparent';
+                cursor.style.borderColor = '#fff';
             });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Hide scroll indicator on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '1';
+            }
         });
     </script>
 </body>
